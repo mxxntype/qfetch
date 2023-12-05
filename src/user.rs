@@ -8,12 +8,13 @@ pub struct User {
 
 impl User {
     pub fn get() -> Self {
-        if let Ok(name) = env::var("USER") {
-            Self { name }
-        } else {
-            log::warn!("Could not read $USER");
-            Self::default()
-        }
+        env::var("USER").map_or_else(
+            |error_msg| {
+                log::warn!("Could not read $USER ({error_msg})");
+                Self::default()
+            },
+            |name| Self { name },
+        )
     }
 }
 
