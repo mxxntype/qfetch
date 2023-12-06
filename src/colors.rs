@@ -3,7 +3,7 @@ use owo_colors::OwoColorize;
 pub fn colors() -> String {
     format!(
         "{} {} {} {} {} {} {}",
-        "".black(),
+        "".bright_black(),
         "".red(),
         "".yellow(),
         "".green(),
