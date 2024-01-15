@@ -18,14 +18,21 @@ fn main() -> Result<()> {
     println!("\t󰀄  {user}");
     println!(
         "\t󰒋  {}",
-        system
-            .host_name()
-            .unwrap_or_else(|| "Unknown".into())
-            .magenta()
+        format!(
+            "{} (Up {} hours)",
+            system.host_name().unwrap_or("Unknown".into()),
+            system.uptime() / 60 / 60
+        )
+        .magenta()
     );
     println!(
         "\t󰹻  {}",
-        system.name().unwrap_or_else(|| "Unknown".into()).green()
+        format!(
+            "{} {}",
+            system.name().unwrap_or("Unknown".into()),
+            system.os_version().unwrap_or("".into())
+        )
+        .green()
     );
     println!("\t󰍛  {ram}");
     println!("\t   {}", colors::colors());
