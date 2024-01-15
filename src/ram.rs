@@ -20,7 +20,12 @@ impl fmt::Display for Ram {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let used_mb = self.used / (1024 * 1024);
         let total_mb = self.total / (1024 * 1024);
-        write!(f, "{}/{} MB", used_mb.yellow(), total_mb.red())?;
+        write!(
+            f,
+            "{}/{} MB",
+            used_mb.bold().yellow(),
+            total_mb.bold().red()
+        )?;
         Ok(())
     }
 }
