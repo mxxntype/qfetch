@@ -6,13 +6,10 @@ mod user;
 use eyre::Result;
 use fetch::Fetch;
 
-fn main() -> Result<()> {
-    setup()?;
-
+fn main() {
+    let _ = setup();
     let fetch = Fetch::new();
     fetch.render();
-
-    Ok(())
 }
 
 fn setup() -> Result<()> {
