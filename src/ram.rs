@@ -1,5 +1,5 @@
 use owo_colors::OwoColorize;
-use std::fmt;
+use std::fmt::{Display, Formatter, Result};
 use sysinfo::{System, SystemExt};
 
 #[derive(Debug)]
@@ -17,15 +17,17 @@ impl Ram {
     }
 }
 
-impl fmt::Display for Ram {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let used_mb = self.used / (1024 * 1024);
-        let total_mb = self.total / (1024 * 1024);
+#[allow(clippy::cast_precision_loss)]
+impl Display for Ram {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        const GB: f64 = 1024u32.pow(3) as f64;
+        let used_gb = self.used as f64 / GB;
+        let total_gb = self.total as f64 / GB;
         write!(
             f,
-            "{}/{} MB",
-            used_mb.bold().yellow(),
-            total_mb.bold().red()
+            "{:.1}/{:.1} GB",
+            used_gb.bold().yellow(),
+            total_gb.bold().red()
         )?;
         Ok(())
     }
