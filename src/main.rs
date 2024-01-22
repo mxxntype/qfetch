@@ -20,7 +20,7 @@ fn main() -> Result<()> {
         "\t󰒋  {}",
         format!(
             "{} (Up {} hours)",
-            system.host_name().unwrap_or("Unknown".into()),
+            system.host_name().unwrap_or_else(|| "Unknown".into()),
             system.uptime() / 60 / 60
         )
         .magenta()
@@ -29,8 +29,8 @@ fn main() -> Result<()> {
         "\t󰹻  {}",
         format!(
             "{} {}",
-            system.name().unwrap_or("Unknown".into()),
-            system.os_version().unwrap_or("".into())
+            system.name().unwrap_or_else(|| String::from("Unknown")),
+            system.os_version().unwrap_or(String::new())
         )
         .green()
     );
