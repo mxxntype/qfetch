@@ -2,6 +2,7 @@ use owo_colors::OwoColorize;
 use std::fmt;
 use sysinfo::{System, SystemExt};
 
+#[derive(Debug)]
 pub struct Ram {
     total: u64,
     used: u64,
