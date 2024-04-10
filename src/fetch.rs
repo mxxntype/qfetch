@@ -3,6 +3,10 @@ use owo_colors::OwoColorize;
 use std::path::PathBuf;
 use sysinfo::{DiskExt, RefreshKind, System, SystemExt};
 
+/// The fetch itself, represented as a struct.
+///
+/// This struct holds all the information it needs to display, as well
+/// as the [`Config`] options that may be passed via CLI arguments.
 #[derive(Debug)]
 pub struct Fetch<'cfg> {
     system: System,
@@ -12,10 +16,14 @@ pub struct Fetch<'cfg> {
 }
 
 impl<'cfg> Fetch<'cfg> {
+    /// Instantiate a new [`Fetch`].
+    ///
+    /// An instance created this way will respect options in the provided [`Config`].
     pub fn with_config(config: &'cfg Config) -> Self {
         let refreshes = RefreshKind::new().with_memory().with_disks_list();
         let system = System::new_with_specifics(refreshes);
         let ram = Ram::new(&system);
+
         Self {
             system,
             ram,
@@ -24,6 +32,9 @@ impl<'cfg> Fetch<'cfg> {
         }
     }
 
+    /// Render the fetch to `stdout`.
+    //
+    // TODO: Implement this via the `std::fmt::Display` trait.
     pub fn render(&self) {
         let icons = self.config.icons;
 
