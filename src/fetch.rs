@@ -1,50 +1,57 @@
-use crate::{colors, ram::Ram, user::User};
+use crate::{colors, config::Config, ram::Ram, user::User};
 use owo_colors::OwoColorize;
 use sysinfo::{RefreshKind, System, SystemExt};
 
 #[derive(Debug)]
-pub struct Fetch {
+pub struct Fetch<'cfg> {
     system: System,
     ram: Ram,
     user: User,
+    config: &'cfg Config,
 }
 
-impl Fetch {
-    pub fn new() -> Self {
+impl<'cfg> Fetch<'cfg> {
+    pub fn with_config(config: &'cfg Config) -> Self {
         let system = System::new_with_specifics(RefreshKind::new().with_memory());
         let ram = Ram::new(&system);
         Self {
             system,
             ram,
             user: User::get(),
+            config,
         }
     }
 
     pub fn render(&self) {
+        let icons = self.config.icons;
+
         println!();
-        println!("\t󰀄  {}", self.user);
-        println!(
-            "\t󰒋  {}",
-            format!(
-                "{} (Up {} hours)",
-                self.system.host_name().unwrap_or_else(|| "Unknown".into()),
-                self.system.uptime() / 60 / 60
-            )
-            .magenta()
-        );
-        println!(
-            "\t󰹻  {}",
-            format!(
-                "{} {}",
-                self.system
-                    .name()
-                    .unwrap_or_else(|| String::from("Unknown")),
-                self.system.os_version().unwrap_or_default()
-            )
-            .green()
-        );
-        println!("\t󰍛  {}", self.ram);
+
+        // Print the user.
+        let prefix = if icons { "󰀄 " } else { "User:" };
+        println!("\t{} {}", prefix, self.user);
+
+        // Print the host.
+        let prefix = if icons { "󰒋 " } else { "Host:" };
+        let hostname = self.system.host_name().unwrap_or("Unknown".into());
+        let uptime = self.system.uptime() as f64 / 3600.0;
+        let info = format!("{} (Up {:.1}h)", hostname, uptime);
+        println!("\t{} {}", prefix, info.magenta());
+
+        // Print the OS.
+        let os_name = self.system.name().unwrap_or("Unknown".into());
+        let os_version = self.system.os_version().unwrap_or_default();
+        let prefix = if icons { "󰹻 " } else { "  OS:" };
+        let info = format!("{} {}", os_name, os_version);
+        println!("\t{} {}", prefix, info.green());
+
+        // Print the ram.
+        let prefix = if icons { "󰍛 " } else { " RAM:" };
+        println!("\t{} {}", prefix, self.ram);
+
+        // Print the color swatches.
         println!("\t   {}", colors::colors());
+
         println!();
     }
 }
