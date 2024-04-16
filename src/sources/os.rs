@@ -10,7 +10,7 @@ pub struct Os {
 
 impl FetchSource for Os {
     fn info(&self) -> String {
-        format!("{} ({})", self.name, self.version)
+        format!("{} {}", self.name, self.version)
     }
 
     fn icon(&self) -> char {
