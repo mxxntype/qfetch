@@ -1,8 +1,10 @@
-mod colors;
+#![allow(clippy::or_fun_call)]
+#![allow(clippy::match_bool)]
+
 mod config;
+mod display;
 mod fetch;
-mod ram;
-mod user;
+mod sources;
 
 use clap::Parser;
 use config::Config;
@@ -12,8 +14,8 @@ use fetch::Fetch;
 fn main() {
     let _ = setup();
     let config = Config::parse();
-    let fetch = Fetch::with_config(&config);
-    fetch.render();
+    let fetch = Fetch::new_with_config(&config);
+    println!("{fetch}");
 }
 
 fn setup() -> Result<()> {

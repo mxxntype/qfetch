@@ -12,6 +12,7 @@ pedantic = "deny"
 nursery = "deny"
 complexity = "deny"
 perf = "deny"
+or_fun_call = "allow"
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive"] }
